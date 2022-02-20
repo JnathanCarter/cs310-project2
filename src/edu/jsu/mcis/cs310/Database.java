@@ -23,14 +23,12 @@ public class Database {
     public String getSectionsAsJSON(int termid, String subjectid, String num) {
         // INSERT YOUR CODE HERE
         ResultSet resultset = null;
-        ResultSetMetaData metadata;
-        int columnCount;
         boolean hasresults;
         String result = null, query;
         PreparedStatement pstSelect = null;
 
         try {
-            if (connection.isValid(0)) {
+            if (isConnected()) {
 
                 /* Prepare Select Query */
                 query = "SELECT * FROM jsu_sp22_v1.section s WHERE subjectid = ? AND num = ?";
@@ -45,13 +43,11 @@ public class Database {
                 /* Check for Results */
                 if (hasresults) {
 
-                    /* Get Results set*/
+                    /* Get Results set */
                     resultset = pstSelect.getResultSet();
-                    
-                    /*Encode to JSON*/
+
+                    /* Encode to JSON */
                     result = getResultSetAsJSON(resultset);
-                    
-                    
 
                 }
                 /* If no data available, print error */
@@ -71,6 +67,30 @@ public class Database {
         int result = 0;
 
         // INSERT YOUR CODE HERE
+        int updateCount;
+        String query;
+        PreparedStatement pstUpdate = null;
+        try {
+
+            if (isConnected()) {
+
+                /* Prepare Insert Query */
+                query = "INSERT INTO jsu_sp22_v1.registration VALUES (?,?,?)";
+                pstUpdate = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+                pstUpdate.setInt(1, studentid);
+                pstUpdate.setInt(2, termid);
+                pstUpdate.setInt(3, crn);
+
+                /* Execute Insert Query */
+                updateCount = pstUpdate.executeUpdate();
+                /* update results to show amount of records effected */
+                if (updateCount > 0) {
+                    result = updateCount;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return result;
 
