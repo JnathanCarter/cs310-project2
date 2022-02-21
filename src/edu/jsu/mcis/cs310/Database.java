@@ -35,7 +35,6 @@ public class Database {
                 pstSelect = connection.prepareStatement(query);
                 pstSelect.setString(1, subjectid);
                 pstSelect.setString(2, num);
-                // todo add possibly need to add to query WHERE termid = ?
 
                 /* Execute Select Query */
                 hasresults = pstSelect.execute();
@@ -176,7 +175,6 @@ public class Database {
                 pstSelect = connection.prepareStatement(query);
                 pstSelect.setInt(1, studentid);
                 pstSelect.setInt(2, termid);
-                // todo add possibly need to add to query WHERE termid = ?
 
                 /* Execute Select Query */
                 hasresults = pstSelect.execute();
