@@ -97,10 +97,32 @@ public class Database {
     }
 
     public int drop(int studentid, int termid, int crn) {
-
-        int result = 0;
-
         // INSERT YOUR CODE HERE
+        int result = 0;
+        int updateCount;
+        String query;
+        PreparedStatement pstUpdate = null;
+        try {
+
+            if (isConnected()) {
+
+                /* Prepare Insert Query */
+                query = "DELETE FROM jsu_sp22_v1.registration  WHERE studentid = ? AND termid = ? AND crn = ?";
+                pstUpdate = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+                pstUpdate.setInt(1, studentid);
+                pstUpdate.setInt(2, termid);
+                pstUpdate.setInt(3, crn);
+
+                /* Execute Insert Query */
+                updateCount = pstUpdate.executeUpdate();
+                /* update results to show amount of records effected */
+                if (updateCount > 0) {
+                    result = updateCount;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return result;
 
